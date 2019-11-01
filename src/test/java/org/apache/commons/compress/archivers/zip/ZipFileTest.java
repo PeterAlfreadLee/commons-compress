@@ -687,6 +687,26 @@ public class ZipFileTest {
         multiByteReadConsistentlyReturnsMinusOneAtEof(getFile("bzip2-zip.zip"));
     }
 
+    @Test
+    public void multiByteReadConsistentlyReturnsMinusOneAtEofUsingAndroidApkFile() throws Exception {
+        multiByteReadConsistentlyReturnsMinusOneAtEof(getFile("COMPRESS-461/Pixel.2.Launcher.modded.5.3.build.23.apk"));
+    }
+
+    @Test
+    public void testUncompressAndroidApkFileCompareOneFileContent() throws IOException {
+        String oneFilename = "build-data.properties";
+        zf = new ZipFile(getFile("COMPRESS-461/Pixel.2.Launcher.modded.5.3.build.23.apk"));
+        ZipArchiveEntry zipArchiveEntry = zf.getEntry(oneFilename);
+        assertEquals(oneFilename, zipArchiveEntry.getName());
+
+        InputStream zipArchiveEntryInputStream = zf.getInputStream(zipArchiveEntry);
+        InputStream inputStream = new FileInputStream(getFile("COMPRESS-461/build-data.properties"));
+
+        byte[] sourceBytes = IOUtils.toByteArray(inputStream);
+        byte[] unCompressBytes = IOUtils.toByteArray(zipArchiveEntryInputStream);
+        assertArrayEquals(sourceBytes, unCompressBytes);
+    }
+
     private void multiByteReadConsistentlyReturnsMinusOneAtEof(File file) throws Exception {
         byte[] buf = new byte[2];
         try (ZipFile archive = new ZipFile(file)) {

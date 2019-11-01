@@ -32,6 +32,7 @@ import java.io.ByteArrayInputStream;
 import java.io.EOFException;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Arrays;
@@ -417,6 +418,11 @@ public class ZipArchiveInputStreamTest {
         multiByteReadConsistentlyReturnsMinusOneAtEof(getFile("bzip2-zip.zip"));
     }
 
+    @Test
+    public void multiByteReadConsistentlyReturnsMinusOneAtEofUsingAndroidApkFile() throws Exception {
+        multiByteReadConsistentlyReturnsMinusOneAtEof(getFile("COMPRESS-461/Pixel.2.Launcher.modded.5.3.build.23.apk"));
+    }
+
     private void multiByteReadConsistentlyReturnsMinusOneAtEof(File file) throws Exception {
         byte[] buf = new byte[2];
         try (FileInputStream in = new FileInputStream(getFile("bla.zip"));
@@ -593,6 +599,18 @@ public class ZipArchiveInputStreamTest {
             thrown.expect(ZipException.class);
             thrown.expectMessage("actual and claimed size don't match");
             byte[] data = IOUtils.toByteArray(archive);
+        }
+    }
+
+    @Test
+    public void testRunIsApkSigningBlockMethod() throws IOException {
+        try {
+            FileInputStream in = new FileInputStream(getFile("COMPRESS-461/Pixel.2.Launcher.modded.5.3.build.23.apk"));
+            ZipArchiveInputStream archive = new ZipArchiveInputStream(in);
+            ZipArchiveEntry zipArchiveEntry = null;
+            while ((zipArchiveEntry = archive.getNextZipEntry()) != null);
+        } catch(Exception e) {
+            fail("Exceptions should not be thrown when iterating an Android APK");
         }
     }
 
