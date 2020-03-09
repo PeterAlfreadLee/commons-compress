@@ -37,6 +37,7 @@ import java.io.InputStream;
 import java.nio.channels.Channels;
 import java.nio.channels.SeekableByteChannel;
 import java.util.Arrays;
+import java.util.Enumeration;
 import java.util.zip.ZipException;
 
 import org.apache.commons.compress.archivers.ArchiveEntry;
@@ -674,6 +675,30 @@ public class ZipArchiveInputStreamTest {
         ArchiveEntry entry = inputStream.getNextEntry();
         while(entry != null){
             entry = inputStream.getNextEntry();
+        }
+    }
+
+    @Test
+    public void testReadZipWithUnexpectedDataDescriptor() throws IOException {
+        ZipArchiveInputStream inputStream = null;
+        ZipFile zipFile = null;
+        try {
+            inputStream = new ZipArchiveInputStream(new FileInputStream(getFile("COMPRESS-506.zip")));
+            zipFile = new ZipFile(getFile("COMPRESS-506.zip"));
+            Enumeration<ZipArchiveEntry> zipFileEntries = zipFile.getEntries();
+            while (inputStream.getNextEntry() != null) {
+                ZipArchiveEntry entry = zipFileEntries.nextElement();
+                try (InputStream zipFileInputStream = zipFile.getInputStream(entry)) {
+                    assertArrayEquals(IOUtils.toByteArray(zipFileInputStream), IOUtils.toByteArray(inputStream));
+                }
+            }
+        } finally {
+            if (inputStream != null) {
+                inputStream.close();
+            }
+            if (zipFile != null) {
+                zipFile.close();
+            }
         }
     }
 

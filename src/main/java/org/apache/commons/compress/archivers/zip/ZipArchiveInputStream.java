@@ -385,6 +385,12 @@ public class ZipArchiveInputStream extends ArchiveInputStream implements InputSt
         return current.entry;
     }
 
+    private void skipUnexpectedDataDescriptor() throws IOException {
+        //
+        pushback(lfhBuf, 12, );
+        ZipLong val = new ZipLong(wordBuf);
+    }
+
     /**
      * Fills the given array with the first local file header and
      * deals with splitting/spanning markers that may prefix the first
