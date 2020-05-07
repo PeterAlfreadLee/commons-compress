@@ -214,6 +214,8 @@ public class TarUtils {
         if (val.bitLength() > 63) {
             throw new IllegalArgumentException("At offset " + offset + ", "
                                                + length + " byte binary number"
+                                               + " with length of " + val.bitLength()
+                                               + " , value of " + val.toString()
                                                + " exceeds maximum signed long"
                                                + " value");
         }
