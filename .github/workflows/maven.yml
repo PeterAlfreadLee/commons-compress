@@ -28,8 +28,10 @@ jobs:
         java: [ 8, 11 ]
         experimental: [false]
         include:
-          - java: [ 14, 15-ea ]
-            experimental: true        
+          - java: 15-ea
+            experimental: true
+          - java: 14
+              experimental: true
         
     steps:
     - uses: actions/checkout@v2.3.2
