@@ -429,6 +429,11 @@ public class ZipArchiveInputStream extends ArchiveInputStream implements InputSt
         if (!current.hasDataDescriptor) {
             if (z64 != null // same as current.usesZip64 but avoids NPE warning
                     && (ZipLong.ZIP64_MAGIC.equals(cSize) || ZipLong.ZIP64_MAGIC.equals(size)) ) {
+                if (z64.getCompressedSize() == null || z64.getSize() == null) {
+                    // avoid NPE if it's a corrupted zip archive
+                    throw new ZipException("archive contains corrupted zip64 extra field");
+                }
+
                 current.entry.setCompressedSize(z64.getCompressedSize().getLongValue());
                 current.entry.setSize(z64.getSize().getLongValue());
             } else if (cSize != null && size != null) {
@@ -985,7 +990,7 @@ public class ZipArchiveInputStream extends ArchiveInputStream implements InputSt
                 int expectDDPos = i;
                 if (i >= expectedDDLen &&
                     (buf.array()[i + 2] == LFH[2] && buf.array()[i + 3] == LFH[3])
-                    || (buf.array()[i] == CFH[2] && buf.array()[i + 3] == CFH[3])) {
+                    || (buf.array()[i + 2] == CFH[2] && buf.array()[i + 3] == CFH[3])) {
                     // found a LFH or CFH:
                     expectDDPos = i - expectedDDLen;
                     done = true;
