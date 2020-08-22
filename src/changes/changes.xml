@@ -172,6 +172,21 @@ The <action> type attribute can be add,update,fix,remove.
       <action type="update" date="2020-08-10" due-to="Dependabot" dev="ggregory">
         Update GitHub actions/checkout from v1 to v2.3.1 #114, #124.
       </action>
+      <action type="update" date="2020-08-21" due-to="Dependabot" dev="ggregory">
+        Update actions/setup-java from v1.4.0 to v1.4.1 #125.
+      </action>
+      <action type="update" date="2020-08-21" due-to="Dependabot" dev="ggregory">
+        Update zstd-jni from 1.4.4-7 to 1.4.5-6 #118.
+      </action>
+      <action type="update" date="2020-08-21" due-to="Dependabot" dev="ggregory">
+        Update tests slf4j-api from 1.7.26 to 1.7.30 #117.
+      </action>
+      <action type="update" date="2020-08-21" due-to="Dependabot" dev="ggregory">
+        Update maven-pmd-plugin from 3.12.0 to 3.13.0 #115.
+      </action>
+      <action type="update" date="2020-08-21" due-to="Dependabot" dev="ggregory">
+        Update maven-bundle-plugin from 3.5.1 to 5.1.1 #116.
+      </action>
       <action issue="COMPRESS-543" type="fix" date="2020-08-10"
               due-to="wulf2333" dev="PeterLee">
         Fix for test fails on Windows. The tests are failing because the
